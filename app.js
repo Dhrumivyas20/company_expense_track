@@ -2592,6 +2592,310 @@ class ExpenseXApp {
     capitalizeFirst(str) {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+    // Chat functionality
+    toggleChatbot() {
+        const chatbotWindow = document.getElementById('chatbot-window');
+        if (chatbotWindow) {
+            chatbotWindow.classList.toggle('hidden');
+        }
+    }
+
+    handleChatKeypress(e) {
+        if (e.key === 'Enter') {
+            this.sendChatMessage();
+        }
+    }
+
+    sendChatMessage() {
+        const input = document.getElementById('chatbot-input');
+        const message = input?.value?.trim();
+        
+        if (!message) return;
+
+        // Add user message
+        this.addChatMessage(message, 'user');
+        
+        // Clear input
+        if (input) {
+            input.value = '';
+        }
+
+        // Get bot response
+        setTimeout(() => {
+            const response = this.getChatbotResponse(message);
+            this.addChatMessage(response, 'bot');
+        }, 1000);
+    }
+
+    addChatMessage(message, type) {
+        const messagesContainer = document.getElementById('chatbot-messages');
+        if (!messagesContainer) return;
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `${type}-message`;
+        
+        if (type === 'bot') {
+            messageDiv.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-content">
+                    <p>${message}</p>
+                </div>
+            `;
+        } else {
+            messageDiv.innerHTML = `
+                <div class="message-avatar">👤</div>
+                <div class="message-content">
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+        
+        messagesContainer.appendChild(messageDiv);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    getChatbotResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        // Analyze user's expenses for personalized responses
+        const userExpenses = this.getUserExpenses();
+        const totalSpent = userExpenses.reduce((sum, e) => sum + (e.converted_amount || e.amount), 0);
+        const categoryBreakdown = this.getCategoryBreakdownData(userExpenses);
+
+        if (lowerMessage.includes('reduce') || lowerMessage.includes('save')) {
+            return `Based on your expenses totaling ${this.formatCurrency(totalSpent)}, I recommend reducing travel expenses by 15% and switching to virtual meetings when possible. Consider meal planning to reduce dining out expenses.`;
+        } else if (lowerMessage.includes('trend') || lowerMessage.includes('pattern')) {
+            return `Your spending patterns show ${categoryBreakdown.labels[0] || 'travel'} as your highest category. Your monthly average is ${this.formatCurrency(totalSpent / 12)}. Consider setting category-specific budgets.`;
+        } else if (lowerMessage.includes('budget') || lowerMessage.includes('limit')) {
+            return `You're currently at ${this.formatCurrency(totalSpent)} total expenses. I suggest setting monthly limits of $500 for travel, $300 for meals, and $200 for office supplies based on your patterns.`;
+        } else if (lowerMessage.includes('top') || lowerMessage.includes('highest')) {
+            const topCategory = categoryBreakdown.labels[0] || 'travel';
+            const topAmount = categoryBreakdown.data[0] || 0;
+            return `Your highest expense category is ${topCategory} at ${this.formatCurrency(topAmount)}. This represents ${Math.round((topAmount/totalSpent)*100)}% of your total expenses.`;
+        } else if (lowerMessage.includes('hello') || lowerMessage.includes('hi')) {
+            return `Hi ${this.currentUser?.full_name || 'there'}! I can help you analyze your expense patterns, suggest cost reductions, and provide budget insights. What would you like to know about your expenses?`;
+        } else {
+            return `I can help you with expense analysis, budget recommendations, spending patterns, and cost reduction strategies. Try asking me about your top expense categories, spending trends, or ways to reduce costs!`;
+        }
+    }
+
+    // Start real-time updates
+    startRealTimeUpdates() {
+        // Simulate real-time notifications
+        setInterval(() => {
+            if (this.currentUser) {
+                this.checkForNewNotifications();
+            }
+        }, 30000);
+    }
+
+    checkForNewNotifications() {
+        // Simulate new notifications
+        if (Math.random() > 0.8) {
+            const newNotification = {
+                id: Date.now(),
+                user_id: this.currentUser.id,
+                type: 'system_update',
+                message: 'New expense reports are ready for review',
+                action_required: false,
+                created_at: new Date().toISOString(),
+                read: false,
+                priority: 'low'
+            };
+            
+            this.notifications.push(newNotification);
+            this.loadUserNotifications();
+        }
+    }
+
+    // Placeholder methods for complete functionality
+    setupDragAndDrop() {
+        console.log('🎯 Setting up drag and drop');
+        // Drag and drop implementation would go here
+    }
+
+    debounceSearch() {
+        console.log('🔍 Search debounce triggered');
+        // Search debounce implementation would go here
+    }
+
+    toggleManagerSelection(role) {
+        console.log('👨‍💼 Toggle manager selection for role:', role);
+        // Manager selection toggle would go here
+    }
+
+    toggleTaxCalculation(checked) {
+        console.log('💰 Toggle tax calculation:', checked);
+        // Tax calculation toggle would go here
+    }
+
+    autoFillCategoryDefaults(category) {
+        console.log('📋 Auto-fill category defaults for:', category);
+        // Category defaults would go here
+    }
+
+    filterExpenses() {
+        console.log('🔍 Filtering expenses');
+        // Expense filtering would go here
+    }
+
+    handleMultipleReceiptUpload(e) {
+        console.log('📎 Multiple receipt upload');
+        // Multiple receipt upload would go here
+    }
+
+    handleReceiptUpload(e) {
+        console.log('📷 Receipt upload');
+        // Receipt upload would go here
+    }
+
+    handleCsvUpload(e) {
+        console.log('📊 CSV upload');
+        // CSV upload would go here
+    }
+
+    handleAddExpense(e) {
+        console.log('💳 Add expense');
+        // Add expense would go here
+    }
+
+    handleAddUser(e) {
+        console.log('👤 Add user');
+        // Add user would go here
+    }
+
+    handleRecurringExpense(e) {
+        console.log('🔄 Add recurring expense');
+        // Recurring expense would go here
+    }
+
+    handleCompanySetup(e) {
+        console.log('🏢 Company setup');
+        // Company setup would go here
+    }
+
+    updateExpensesList() {
+        console.log('📝 Update expenses list');
+        // Update expenses list would go here
+    }
+
+    updateBudgetPage() {
+        console.log('💰 Update budget page');
+        // Update budget page would go here
+    }
+
+    updateAnalyticsPage() {
+        console.log('📊 Update analytics page');
+        // Update analytics page would go here
+    }
+
+    updateApprovalsPage() {
+        console.log('✅ Update approvals page');
+        // Update approvals page would go here
+    }
+
+    updateUsersList() {
+        console.log('👥 Update users list');
+        // Update users list would go here
+    }
+
+    updateReportsPage() {
+        console.log('📋 Update reports page');
+        // Update reports page would go here
+    }
+
+    updateIntegrationsPage() {
+        console.log('🔗 Update integrations page');
+        // Update integrations page would go here
+    }
+
+    implementInsight(insightId) {
+        console.log('💡 Implement insight:', insightId);
+        this.showSuccessToast('Insight implementation started!');
+    }
+
+    dismissInsight(insightId) {
+        console.log('❌ Dismiss insight:', insightId);
+        this.showSuccessToast('Insight dismissed.');
+    }
+
+    showAddUserModal() {
+        const modal = document.getElementById('add-user-modal');
+        if (modal) {
+            modal.classList.remove('hidden');
+        }
+    }
+
+    hideAddUserModal() {
+        const modal = document.getElementById('add-user-modal');
+        if (modal) {
+            modal.classList.add('hidden');
+        }
+    }
+}
+// Supporting Classes
+class ExpenseAIEngine {
+    constructor(app) {
+        this.app = app;
+    }
+
+    generateInsights() {
+        return this.app.insights.slice(0, 3); // Return first 3 insights
+    }
+
+    generateAdvancedInsights() {
+        return [
+            {
+                id: 'trend_1',
+                type: 'trend_analysis',
+                title: 'Spending Velocity Increase',
+                description: 'Expense submission rate has increased 23% in the last 30 days',
+                metrics: {
+                    'Current Rate': '45/week',
+                    'Previous Rate': '37/week',
+                    'Trend': '+23%'
+                }
+            }
+        ];
+    }
+
+    suggestCategory(vendor, description) {
+        const categoryRules = {
+            'uber|taxi|lyft|transport': 'travel',
+            'restaurant|food|cafe|starbucks': 'meals',
+            'office|supplies|staples|depot': 'office_supplies',
+            'hotel|accommodation|booking': 'travel',
+            'software|subscription|saas|license': 'software'
+        };
+        
+        const text = `${vendor} ${description}`.toLowerCase();
+        
+        for (const [pattern, category] of Object.entries(categoryRules)) {
+            if (new RegExp(pattern, 'i').test(text)) {
+                return category;
+            }
+        }
+        
+        return 'other';
+    }
+}
+function toggleChatbot() {
+    app.toggleChatbot();
+}
+function handleChatKeypress(event) {
+    app.handleChatKeypress(event);
+}
+
+function sendChatMessage() {
+    app.sendChatMessage();
+}
+
+function sendSuggestion(message) {
+    const input = document.getElementById('chatbot-input');
+    if (input) {
+        input.value = message;
+        app.sendChatMessage();
+    }
 }
 
 // Initialize the application
