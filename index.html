@@ -1,15 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Expense Tracker</title>
-  <link rel="stylesheet" href="css/styles.css">
-  <script src="libs/chart.min.js"></script>
-  <script src="libs/tesseract.min.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpenseX - Management System</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div id="app">
-    <!-- Render login/signup, then dashboards as per user role -->
-  </div>
-  <script src="js/main.js"></script>
+    <!-- Login Page -->
+    <div class="page active" id="login-page">
+        <div class="login-container">
+            <div class="login-card card">
+                <div class="card__body">
+                    <div class="login-header">
+                        <h1>ExpenseX Management System</h1>
+                        <p>Access your dashboard</p>
+                    </div>
+                    
+                    <div class="login-error hidden" id="login-error">
+                        <p id="error-message"></p>
+                    </div>
+                    
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label class="form-label">Username</label>
+                            <input type="text" class="form-control" id="login-username" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" class="form-control" id="login-password" required>
+                        </div>
+                        
+                        <button type="submit" class="btn btn--primary btn--full-width">Login</button>
+                    </form>
+                    
+                    <div class="demo-accounts">
+                        <h4>Demo Accounts</h4>
+                        <div class="demo-account-grid">
+                            <div class="demo-account" onclick="app.fillDemoCredentials('admin', 'admin123')">
+                                <span class="demo-role">👑 Admin</span>
+                                <span class="demo-creds">admin / admin123</span>
+                            </div>
+                            <div class="demo-account" onclick="app.fillDemoCredentials('john_manager', 'manager123')">
+                                <span class="demo-role">👔 Manager</span>
+                                <span class="demo-creds">john_manager / manager123</span>
+                            </div>
+                            <div class="demo-account" onclick="app.fillDemoCredentials('jane_employee', 'employee123')">
+                                <span class="demo-role">👤 Employee</span>
+                                <span class="demo-creds">jane_employee / employee123</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Interface -->
+    <div class="admin-interface" id="admin-interface">
+        <!-- Admin Navigation Bar -->
+        <nav class="admin-navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <div class="brand-logo">
+                        <span class="logo-icon">💼</span>
+                        <span class="brand-name">ExpenseX</span>
+                    </div>
+                </div>
+                
+                <div class="nav-menu">
+                    <a href="#dashboard" class="nav-link active" data-page="admin-dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    <a href="#expenses" class="nav-link" data-page="admin-expenses">
+                        <span class="nav-icon">💳</span>
+                        <span class="nav-text">Expenses</span>
+                    </a>
+                    <a href="#budget" class="nav-link" data-page="admin-budget">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Budget</span>
+                    </a>
+                    <a href="#analytics" class="nav-link" data-page="admin-analytics">
+                        <span class="nav-icon">📈</span>
+                        <span class="nav-text">Analytics</span>
+                    </a>
+                    <a href="#reports" class="nav-link" data-page="admin-reports">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">Reports</span>
+                    </a>
+                    <a href="#users" class="nav-link" data-page="admin-users">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text">Users</span>
+                    </a>
+                    <a href="#integration" class="nav-link" data-page="admin-integration">
+                        <span class="nav-icon">🔗</span>
+                        <span class="nav-text">Integration</span>
+                    </a>
+                    <a href="#notifications" class="nav-link" data-page="admin-notifications">
+                        <span class="nav-icon">🔔</span>
+                        <span class="nav-text">Notifications</span>
+                        <span class="notification-badge">15</span>
+                    </a>
+                </div>
+                
+                <div class="nav-user">
+                    <div class="user-profile">
+                        <div class="user-avatar admin-avatar">
+                            <span class="avatar-text">SA</span>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">System Administrator</div>
+                            <div class="user-role">Admin</div>
+                        </div>
+                        <div class="user-dropdown">
+                            <button class="dropdown-btn">⚙️</button>
+                            <div class="dropdown-menu">
+                                <a href="#profile">Profile Settings</a>
+                                <a href="#preferences">Preferences</a>
+                                <a href="#security">Security</a>
+                                <hr>
+                                <a href="#logout" onclick="app.handleLogout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Admin Pages Content -->
+        <div id="admin-content"></div>
+    </div>
+
+    <!-- Manager Interface -->
+    <div class="manager-interface" id="manager-interface">
+        <!-- Manager Navigation Bar -->
+        <nav class="manager-navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <div class="brand-logo">
+                        <span class="logo-icon">💼</span>
+                        <span class="brand-name">ExpenseX</span>
+                    </div>
+                </div>
+                
+                <div class="nav-menu">
+                    <a href="#dashboard" class="nav-link active" data-page="manager-dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    <a href="#team-expenses" class="nav-link" data-page="manager-team-expenses">
+                        <span class="nav-icon">💳</span>
+                        <span class="nav-text">Team Expenses</span>
+                    </a>
+                    <a href="#approvals" class="nav-link" data-page="manager-approvals">
+                        <span class="nav-icon">✅</span>
+                        <span class="nav-text">Pending Approvals</span>
+                        <span class="notification-badge">3</span>
+                    </a>
+                    <a href="#team-budget" class="nav-link" data-page="manager-team-budget">
+                        <span class="nav-icon">📊</span>
+                        <span class="nav-text">Team Budget</span>
+                    </a>
+                    <a href="#team-reports" class="nav-link" data-page="manager-team-reports">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">Team Reports</span>
+                    </a>
+                    <a href="#team-members" class="nav-link" data-page="manager-team-members">
+                        <span class="nav-icon">👥</span>
+                        <span class="nav-text">Team Members</span>
+                    </a>
+                    <a href="#notifications" class="nav-link" data-page="manager-notifications">
+                        <span class="nav-icon">🔔</span>
+                        <span class="nav-text">Notifications</span>
+                        <span class="notification-badge">5</span>
+                    </a>
+                </div>
+                
+                <div class="nav-user">
+                    <div class="user-profile">
+                        <div class="user-avatar manager-avatar">
+                            <span class="avatar-text">JS</span>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">John Smith</div>
+                            <div class="user-role">Sales Manager</div>
+                        </div>
+                        <div class="user-dropdown">
+                            <button class="dropdown-btn">⚙️</button>
+                            <div class="dropdown-menu">
+                                <a href="#profile">Profile Settings</a>
+                                <a href="#preferences">Preferences</a>
+                                <a href="#security">Security</a>
+                                <hr>
+                                <a href="#logout" onclick="app.handleLogout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Manager Pages Content -->
+        <div id="manager-content"></div>
+    </div>
+
+    <!-- Employee Interface -->
+    <div class="employee-interface" id="employee-interface">
+        <!-- Employee Navigation Bar -->
+        <nav class="employee-navbar">
+            <div class="nav-container">
+                <div class="nav-brand">
+                    <div class="brand-logo">
+                        <span class="logo-icon">💼</span>
+                        <span class="brand-name">ExpenseX</span>
+                    </div>
+                </div>
+                
+                <div class="nav-menu">
+                    <a href="#dashboard" class="nav-link active" data-page="employee-dashboard">
+                        <span class="nav-icon">🏠</span>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    <a href="#submit-expense" class="nav-link" data-page="employee-submit-expense">
+                        <span class="nav-icon">➕</span>
+                        <span class="nav-text">Submit Expense</span>
+                    </a>
+                    <a href="#my-expenses" class="nav-link" data-page="employee-my-expenses">
+                        <span class="nav-icon">📋</span>
+                        <span class="nav-text">My Expenses</span>
+                    </a>
+                </div>
+                
+                <div class="nav-user">
+                    <div class="user-profile">
+                        <div class="user-avatar employee-avatar">
+                            <span class="avatar-text">JD</span>
+                        </div>
+                        <div class="user-info">
+                            <div class="user-name">Jane Doe</div>
+                            <div class="user-role">Sales Rep</div>
+                        </div>
+                        <div class="user-dropdown">
+                            <button class="dropdown-btn">⚙️</button>
+                            <div class="dropdown-menu">
+                                <a href="#profile">Profile Settings</a>
+                                <a href="#preferences">Preferences</a>
+                                <a href="#security">Security</a>
+                                <hr>
+                                <a href="#logout" onclick="app.handleLogout()">Logout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Employee Pages Content -->
+        <div id="employee-content"></div>
+    </div>
+
+    <!-- Modal for Expense Details -->
+    <div class="modal hidden" id="expense-modal">
+        <div class="modal-overlay">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 id="modal-title">Expense Details</h3>
+                    <button class="modal-close" onclick="app.closeModal()">&times;</button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    <!-- Dynamic content -->
+                </div>
+                <div class="modal-footer" id="modal-footer">
+                    <!-- Dynamic buttons -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success/Error Messages -->
+    <div class="toast hidden" id="toast">
+        <div class="toast-content">
+            <span class="toast-icon"></span>
+            <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
 </body>
 </html>
