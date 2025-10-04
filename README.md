@@ -10,6 +10,8 @@ Problem statement name : Company Expense Tracker
 
 Reviewer name : Aman Patel
 
+Deployed link : https://odooexpensetracker.netlify.app/
+
 Video presentation link : 
 
 There are 3 role based access.
