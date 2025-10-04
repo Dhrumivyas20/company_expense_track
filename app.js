@@ -373,7 +373,7 @@ class ExpenseXApp {
                     <div class="stat-card">
                         <div class="stat-icon">💰</div>
                         <div class="stat-content">
-                            <div class="stat-value">$125,847</div>
+                            <div class="stat-value">$ 125,847</div>
                             <div class="stat-label">Total Expenses</div>
                             <div class="stat-change positive">+12.5%</div>
                         </div>
