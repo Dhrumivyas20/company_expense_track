@@ -279,11 +279,79 @@
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
+    Success/Error Messages
     <div class="toast hidden" id="toast">
         <div class="toast-content">
             <span class="toast-icon"></span>
             <span class="toast-message"></span>
+        </div>
+    </div>
+
+    <!-- Enhanced AI Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" onclick="toggleChatbot()">
+            <span class="chatbot-icon">🤖</span>
+        </button>
+        <div class="chatbot-window hidden" id="chatbot-window">
+            <div class="chatbot-header">
+                <h4>🤖 AI Expense Assistant</h4>
+                <div class="chatbot-status">
+                    <span class="status-dot online"></span>
+                    <span>Online</span>
+                </div>
+                <button class="chatbot-close" onclick="toggleChatbot()">&times;</button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="bot-message">
+                    <div class="message-avatar">🤖</div>
+                    <div class="message-content">
+                        <p>Hello! I'm your AI expense assistant. I can help you with:</p>
+                        <ul>
+                            <li>💡 Cost reduction insights</li>
+                            <li>📊 Spending pattern analysis</li>
+                            <li>🎯 Budget optimization</li>
+                            <li>📈 Trend predictions</li>
+                        </ul>
+                        <p>What would you like to know about your expenses?</p>
+                    </div>
+                </div>
+            </div>
+            <div class="chatbot-suggestions">
+                <button class="suggestion-btn" onclick="sendSuggestion('Show my top expense categories')">Top Categories</button>
+                <button class="suggestion-btn" onclick="sendSuggestion('How can I reduce costs?')">Cost Reduction</button>
+                <button class="suggestion-btn" onclick="sendSuggestion('Budget analysis')">Budget Analysis</button>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Ask me about your expenses..." onkeypress="handleChatKeypress(event)">
+                <button class="btn btn--sm btn--primary" onclick="sendChatMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Enhanced Loading Overlay -->
+    <div class="loading-overlay hidden" id="loading-overlay">
+        <div class="loading-container">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">
+                <h3>Processing...</h3>
+                <p id="loading-message">Please wait while we process your request</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast hidden" id="success-toast">
+        <div class="toast-content">
+            <div class="toast-icon success">✅</div>
+            <div class="toast-message" id="success-message"></div>
+        </div>
+    </div>
+
+    <!-- Error Toast -->
+    <div class="toast hidden" id="error-toast">
+        <div class="toast-content">
+            <div class="toast-icon error">❌</div>
+            <div class="toast-message" id="error-message-toast"></div>
         </div>
     </div>
 
