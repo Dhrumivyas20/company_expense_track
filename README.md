@@ -2,7 +2,9 @@
 
 Team details :
 - Team Name : Team Clarity
-- Team Members Details : Name : Dhrumi Vyas // Number : 9558099245
+- Team Members Details :
+-   Name : Dhrumi Vyas 
+-   Mobile Number : 9558099245
 
 Problem statement name : Company Expense Tracker
 
